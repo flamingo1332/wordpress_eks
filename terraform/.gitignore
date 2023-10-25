@@ -1,0 +1,25 @@
+# Local Terraform state
+.terraform/
+
+# Terraform state files
+terraform.tfstate*
+*.tfstate
+*.tfstate.backup
+
+# Terraform variable files
+*.tfvars
+
+# Terraform lock file
+.terraform.lock.hcl
+
+# Temporary files
+*.swp
+*~
+
+# Editor-specific files (e.g., for Visual Studio Code)
+.vscode/
+
+
+# notes
+TODO.txt
+PLAN.txt
