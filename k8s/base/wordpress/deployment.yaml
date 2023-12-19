@@ -1,0 +1,41 @@
+apiVersion: apps/v3
+kind: Deployment
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+      - name: wordpress
+        image: wordpress:6.3.2-fpm-alpine
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 100m
+          limits:
+            memory: 512Mi
+            cpu: 500m
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: "your-rds-endpoint.amazonaws.com" # Modify with your RDS endpoint
+        - name: WORDPRESS_DB_NAME
+          value: "your-db-name" # Modify with your database name
+        - name: WORDPRESS_DB_USER
+          value: "your-db-username" # Modify with your RDS username
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom: 
+            secretKeyRef: # Use a Kubernetes secret for the DB password
+              name: wordpress-db-secret
+              key: password
+        ports:
+        - containerPort: 80
+

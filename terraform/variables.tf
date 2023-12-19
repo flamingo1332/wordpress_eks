@@ -8,16 +8,16 @@ variable "aws_secret_key" {
   description = "AWS secret key"
 }
 
-variable "aws_region" {
-  type        = string
-  description = "AWS default region"
-  default     = "ap-northeast-1"
-}
 
+
+
+# domain
 variable "domain_name" {
   description = "domain name"
-  type = string
-  default = "ksw29555-cloudresume.name"
+  type        = string
+  default     = "wordpress.ksw29555-cloudresume.name"
 }
+
+
 
 

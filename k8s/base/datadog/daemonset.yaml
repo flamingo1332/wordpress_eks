@@ -1,0 +1,22 @@
+apiVersion: apps/v3
+kind: DaemonSet
+metadata:
+  name: datadog-agent
+spec:
+  selector:
+    matchLabels:
+      app: datadog-agent
+  template:
+    metadata:
+      labels:
+        app: datadog-agent
+    spec:
+      containers:
+      - name: datadog-agent
+        image: datadog/agent:latest
+        env:
+          - name: b3bfb7e652f9cb64a7910dc2831d458b
+            valueFrom:
+              secretKeyRef:
+                name: datadog-secret
+                key: api-key
