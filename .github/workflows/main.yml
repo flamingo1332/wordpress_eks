@@ -1,75 +1,75 @@
-# name: deploy
+name: deploy
 
-# on:
-#   push:
-#     branches:
-#       - main 
+on:
+  push:
+    branches:
+      - main 
 
 
-# env:
-#   TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#   TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#   TF_VAR_aws_access_key_source: ${{ secrets.AWS_ACCESS_KEY_ID_SOURCE }}
-#   TF_VAR_aws_secret_key_source: ${{ secrets.AWS_SECRET_ACCESS_KEY_SOURCE }}
-#   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-#   DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
+env:
+  TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  TF_VAR_aws_access_key_source: ${{ secrets.AWS_ACCESS_KEY_ID_SOURCE }}
+  TF_VAR_aws_secret_key_source: ${{ secrets.AWS_SECRET_ACCESS_KEY_SOURCE }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
 
   
 
-# jobs:
-#   terraform:
-#     name: terraform plan apply
-#     runs-on: ubuntu-latest
-#     # environment: production
+jobs:
+  terraform:
+    name: terraform plan apply
+    runs-on: ubuntu-latest
+    # environment: production
 
-#     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-#     # defaults:
-#     #   run:
-#     #     shell: bash
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    # defaults:
+    #   run:
+    #     shell: bash
     
-#     steps:
-#     - name: Checkout 
-#       uses: actions/checkout@v2
+    steps:
+    - name: Checkout 
+      uses: actions/checkout@v2
 
-#     # - name: Configure AWS credentials
-#     #   uses: aws-actions/configure-aws-credentials@v2
-#     #   with:
-#     #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#     #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#     #     aws-region: ap-northeast-1
+    # - name: Configure AWS credentials
+    #   uses: aws-actions/configure-aws-credentials@v2
+    #   with:
+    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     aws-region: ap-northeast-1
     
-#   # 테라폼으로 route53 records, certificate, eks cluster, IAM role, Dynamodb 다 provision한다.
-#     - name: Set up Terraform
-#       uses: hashicorp/setup-terraform@v2
-#       with:
-#         terraform_wrapper: false
+  # 테라폼으로 route53 records, certificate, eks cluster, IAM role, Dynamodb 다 provision한다.
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_wrapper: false
     
-#     - name: Terraform Init
-#       run: terraform init
-#       working-directory: ./Terraform
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ./Terraform
 
-#     - name: Terraform Plan
-#       run: terraform plan
-#       working-directory: ./Terraform
+    - name: Terraform Plan
+      run: terraform plan
+      working-directory: ./Terraform
 
-#     - name: Terraform Apply
-#       run: terraform apply -auto-approve
-#       working-directory: ./Terraform
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
+      working-directory: ./Terraform
     
       
     
-#     - name: Save Terraform Outputs
-#       id: save-outputs
-#       run: |
-#         echo 'DB_ENDPOINT=$(terraform output -raw db_endpoint)' >> "$GITHUB_ENV"
-#       working-directory: ./Terraform
+    - name: Save Terraform Outputs
+      id: save-outputs
+      run: |
+        echo 'DB_ENDPOINT=$(terraform output -raw db_endpoint)' >> "$GITHUB_ENV"
+      working-directory: ./Terraform
 
-#     # kubernetes yaml 파일 deploy한다.
-#     # ${{ env.DB_ENDPOINT }} 이런식으로 사용 
+    # kubernetes yaml 파일 deploy한다.
+    # ${{ env.DB_ENDPOINT }} 이런식으로 사용 
 
 
-#     # cluster 안에서 뭐 할거있으면 한다.(ansible, eksctl 등)
+    # cluster 안에서 뭐 할거있으면 한다.(ansible, eksctl 등)
       
-#     #  testing? 
+    #  testing? 
 
     

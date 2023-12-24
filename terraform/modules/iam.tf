@@ -101,26 +101,26 @@ module "cluster_autoscaler_irsa_role" {
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["kube-system:cluster-autoscaler"] 
+      namespace_service_accounts = ["kube-system:cluster-autoscaler"]
     }
   }
 }
 
 
 # externalDNS
-module "cluster_autoscaler_irsa_role" {
+module "external_dns_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~> 5.0"
 
-  role_name                        = "external-dns"
-  attach_external_dns_policy       = true
-  external_dns_hosted_zone_arns
-  cluster_autoscaler_cluster_ids   = [module.eks.cluster_id]
+  role_name                  = "external-dns"
+  attach_external_dns_policy = true
+  # external_dns_hosted_zone_arns    = 
+  cluster_autoscaler_cluster_ids = [module.eks.cluster_id]
 
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["kube-system:external-dns"] 
+      namespace_service_accounts = ["kube-system:external-dns"]
     }
   }
 }
@@ -133,7 +133,7 @@ module "aws_load_balancer_controller_irsa_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~> 5.0"
 
-  role_name = "aws-load-balancer-controller"
+  role_name                              = "aws-load-balancer-controller"
   attach_load_balancer_controller_policy = true
 
   oidc_providers = {

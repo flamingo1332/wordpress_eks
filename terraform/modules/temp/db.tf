@@ -1,8 +1,8 @@
 # RDS free tier instance for wordpress DB
 module "db" {
-  source = "terraform-aws-modules/rds/aws"
-  version         = "~> 6.0"
-  identifier = "wordpress_db_instance"
+  source     = "terraform-aws-modules/rds/aws"
+  version    = "~> 6.0"
+  identifier = "wordpress-db-instance"
 
   engine            = "mysql"
   engine_version    = "5.7"
@@ -13,9 +13,14 @@ module "db" {
   username = "user"
   port     = "3306"
 
+# prefix 관련 에러발생
+  create_db_option_group = false
+  create_db_parameter_group = false
+
+
   iam_database_authentication_enabled = true
 
-  vpc_security_group_ids = module.vpc.vpc_security_group_ids
+  vpc_security_group_ids = module.vpc.default_vpc_default_security_group_id
 
   maintenance_window = "Mon:00:00-Mon:03:00"
   backup_window      = "03:00-06:00"

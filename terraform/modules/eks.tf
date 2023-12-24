@@ -1,12 +1,12 @@
 
 # eks cluster
 module "eks" {
-  source          = "terraform-aws-modules/eks/aws"
-  version         = "~> 19.0"
+  source  = "terraform-aws-modules/eks/aws"
+  version = "~> 19.0"
 
   cluster_name    = "wordpress-cluster"
   cluster_version = "1.28"
-  
+
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
 
@@ -15,35 +15,18 @@ module "eks" {
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
 
-# addon (kube-proxy, vpc-cni, coredns)
+  # addon (kube-proxy, vpc-cni, coredns)
   cluster_addons = {
-    kube-proxy = {
-      most_recent = true
-    }
-
     vpc-cni = {
-      most_recent = true
+      resolve_conflicts = "OVERWRITE"
     }
-
     coredns = {
-      most_recent = true
-      configuration_values = jsonencode({
-        replicaCount = 2
-        resources = {
-          limits = {
-            cpu    = "100m"
-            memory = "150Mi"  
-          }
-          requests = {
-            cpu    = "100m"
-            memory = "150Mi"
-          }
-        }
-      })
+      resolve_conflicts = "OVERWRITE"
     }
+    kube-proxy = {}
   }
-  
-# nodes
+
+  # nodes
   eks_managed_node_groups = {
     general = {
       desired_size = 1
@@ -60,6 +43,8 @@ module "eks" {
     }
   }
 
+
+  # configmap for eks user access
   create_aws_auth_configmap = true
   manage_aws_auth_configmap = true
   aws_auth_roles = [
@@ -70,6 +55,17 @@ module "eks" {
     },
   ]
 
+  # aws lb controller 호환
+  node_security_group_additional_rules = {
+    ingress_allow_access_from_control_plane = {
+      type                          = "ingress"
+      protocol                      = "tcp"
+      from_port                     = 9443
+      to_port                       = 9443
+      source_cluster_security_group = true
+      description                   = "Allow access from control plane to webhook port of AWS load balancer controller"
+    }
+  }
 
   tags = {
     Environment = "prod"

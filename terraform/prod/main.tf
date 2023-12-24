@@ -5,6 +5,14 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.0"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.0"
+    }
   }
 
   # backend "s3" {
@@ -16,28 +24,28 @@ terraform {
   # }
 }
 
-module "terraform_state_backend" {
-  source = "cloudposse/tfstate-backend/aws"
-  # Cloud Posse recommends pinning every module to a specific version
-  version    = "1.1.1"
-  name       = "ksw29555-wordpress-terraform-backend-bucket"
+# module "terraform_state_backend" {
+#   source = "cloudposse/tfstate-backend/aws"
+#   # Cloud Posse recommends pinning every module to a specific version
+#   version = "1.1.1"
+#   name    = "ksw29555-wordpress-terraform-backend-bucket"
 
 
-  dynamodb_enabled = true
-  dynamodb_table   = "wordpress-terraform-backend-db"
-  read_capacity    = 1
-  write_capacity   = 1
+#   dynamodb_enabled    = true
+#   dynamodb_table_name = "wordpress-terraform-backend-db"
+#   read_capacity       = 1
+#   write_capacity      = 1
 
-  terraform_backend_config_file_path = "."
-  terraform_backend_config_file_name = "backend.tf"
+#   terraform_backend_config_file_path = "."
+#   terraform_backend_config_file_name = "backend.tf"
 
-  # set it true to destroy
-  force_destroy = false
-}
+#   # set it true to destroy
+#   force_destroy = false
+# }
 
 
 provider "aws" {
-  region     = "ap-northeast-1"
+  region     = var.aws_region
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
 }
@@ -64,3 +72,6 @@ provider "helm" {
     }
   }
 }
+
+
+
