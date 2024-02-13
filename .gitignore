@@ -1,1 +1,32 @@
-.github/workflows/main.yaml
+# Local Terraform directories
+**/.terraform/*
+**/.terraform
+
+# State files
+*.tfstate
+*.tfstate.*
+
+# Lock file
+.terraform.lock.hcl
+
+# Crash log files
+crash.log
+
+# Ignore any .tfvars files that may contain sensitive data
+*.tfvars
+
+# Ignore .sh files
+*.sh
+
+# Ignore override files as they are usually used to override resources locally
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+TODO.txt
+.github/workflows

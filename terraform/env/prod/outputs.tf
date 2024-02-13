@@ -31,3 +31,16 @@ output "access_argocd" {
     echo "ArgoCD URL: https://$(kubectl get svc -n argocd argo-cd-argocd-server -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')"
     EOT
 }
+
+
+# -------------------------------------------------------------------
+
+output "eks_cluster_endpoint" {
+  description = "cluster endpoint"
+  value       = module.eks.cluster_endpoint
+}
+
+output "cluster_name" {
+  description = "cluster_name"
+  value       = module.eks.cluster_name
+}
