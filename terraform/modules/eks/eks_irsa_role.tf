@@ -18,6 +18,10 @@ module "cluster_autoscaler_irsa_role" {
       namespace_service_accounts = ["kube-system:cluster-autoscaler"]
     }
   }
+  tags = {
+    Project     = var.project_name
+    Environment = var.env
+  }
 }
 
 
@@ -30,13 +34,17 @@ module "external_dns_irsa_role" {
   role_name                  = "external-dns"
   attach_external_dns_policy = true
   # external_dns_hosted_zone_arns    = 
-  cluster_autoscaler_cluster_ids = [module.eks.cluster_id]
+  external_dns_hosted_zone_arns = [var.hosted_zone_arn]
 
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
       namespace_service_accounts = ["kube-system:external-dns"]
     }
+  }
+  tags = {
+    Project     = var.project_name
+    Environment = var.env
   }
 }
 
@@ -58,9 +66,54 @@ module "aws_load_balancer_controller_irsa_role" {
       namespace_service_accounts = ["kube-system:aws-load-balancer-controller"]
     }
   }
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.env
+  }
 }
 
 
+# argocd vault plugin role (for aws secrets manager access)
+module "irsa_role" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+  role_name              = "argocd-vault-plugin"
+  allow_self_assume_role = true
+
+  oidc_providers = {
+    ex = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["argocd:argocd-repo-server"]
+    }
+  }
+
+  role_policy_arns = {
+    policy = aws_iam_policy.avp_policy.arn
+  }
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.env
+  }
+}
+
+resource "aws_iam_policy" "avp_policy" {
+  name        = "avp-Policy"
+  description = "Policy for argocd vault plugin"
+  policy      = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "secretsmanager:GetSecretValue",
+            "Resource": [${aws_secretsmanager_secret.eks_secrets.arn}]
+        }
+    ]
+}
+EOF
+}
 
 # prometheus irsa role(for storing monitoring data on s3)
 # module "prometheus_irsa_role" {

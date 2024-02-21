@@ -76,6 +76,8 @@ module "eks" {
 
   project_name = var.project_name
   env          = var.env
+  aws_region   = var.aws_region
+  domain_name  = var.domain_name
 
   eks_cluster_version            = var.eks_cluster_version
   cluster_endpoint_public_access = var.eks_cluster_endpoint_public_access
@@ -83,6 +85,8 @@ module "eks" {
   vpc_id          = module.vpc.vpc_id
   private_subnets = module.vpc.private_subnets
   vpc_owner_id    = module.vpc.vpc_owner_id
+
+  hosted_zone_arn = module.route53.hosted_zone_arn
 
   # managed node group config
   desired_size   = var.eks_cluster_desired_size
@@ -95,10 +99,13 @@ module "eks" {
 
 
   # aws secrets manager
-  db_password = module.db.db_password
-  db_endpoint = module.db.db_endpoint
-  acm_arn     =  module.route53.acm_arn
-
+  db_name              = var.db_name
+  db_username          = var.db_username
+  db_password          = module.db.db_password
+  db_endpoint          = module.db.db_endpoint
+  acm_arn              = module.route53.acm_arn
+  slack_url            = var.slack_url
+  secrets_manager_name = var.secrets_manager_name
 }
 
 # route53 & acm

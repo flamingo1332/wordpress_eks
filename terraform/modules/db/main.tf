@@ -46,7 +46,8 @@ module "db" {
   ]
 
   tags = {
-    Project = "${var.project_name}_${var.env}"
+    Project     = var.project_name
+    Environment = var.env
   }
 }
 

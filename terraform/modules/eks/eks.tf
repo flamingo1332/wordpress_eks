@@ -81,7 +81,8 @@ module "eks" {
 
 
   tags = {
-    Project = "${var.project_name}_${var.env}"
+    Project     = var.project_name
+    Environment = var.env
   }
 }
 
@@ -107,6 +108,11 @@ module "allow_eks_access_iam_policy" {
       },
     ]
   })
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.env
+  }
 }
 
 module "eks_admins_iam_role" {
@@ -122,6 +128,10 @@ module "eks_admins_iam_role" {
   trusted_role_arns = [
     "arn:aws:iam::${var.vpc_owner_id}:root"
   ]
+  tags = {
+    Project     = var.project_name
+    Environment = var.env
+  }
 }
 
 module "user1_iam_user" {
@@ -133,6 +143,11 @@ module "user1_iam_user" {
   create_iam_user_login_profile = false
 
   force_destroy = true
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.env
+  }
 }
 
 module "allow_assume_eks_admins_iam_policy" {
@@ -154,6 +169,11 @@ module "allow_assume_eks_admins_iam_policy" {
       },
     ]
   })
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.env
+  }
 }
 
 module "eks_admins_iam_group" {
@@ -165,6 +185,11 @@ module "eks_admins_iam_group" {
   create_group                      = true
   group_users                       = [module.user1_iam_user.iam_user_name]
   custom_group_policy_arns          = [module.allow_assume_eks_admins_iam_policy.arn]
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.env
+  }
 }
 
 

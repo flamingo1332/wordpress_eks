@@ -11,14 +11,15 @@ module "acm" {
   domain_name = var.domain_name
   zone_id     = data.aws_route53_zone.selected.zone_id
 
-  validation_method    = "DNS"
+  validation_method = "DNS"
 
   subject_alternative_names = ["www.${var.domain_name}"]
 
-  wait_for_validation  = true
+  wait_for_validation = true
 
   tags = {
-    Project = "${var.project_name}_${var.env}"
+    Project     = var.project_name
+    Environment = var.env
   }
 }
 

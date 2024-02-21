@@ -7,6 +7,22 @@ variable "project_name" {
   type        = string
 }
 
+variable "aws_region" {
+  description = "aws region"
+  type        = string
+}
+
+variable "domain_name" {
+  description = "domain name"
+  type        = string
+}
+
+variable "slack_url" {
+  description = "slack notification url"
+  type        = string
+}
+
+# eks cluster
 
 variable "eks_cluster_version" {
   description = "eks cluster version"
@@ -15,9 +31,12 @@ variable "eks_cluster_version" {
 
 variable "cluster_endpoint_public_access" {
   description = "cluster_endpoint_public_access"
-  type    = bool
+  type        = bool
 }
 
+variable "secrets_manager_name" {
+  type = string
+}
 
 # vpc 
 
@@ -72,19 +91,36 @@ variable "capacity_type" {
 }
 
 
-# aws secrets manager
+# db
+variable "db_name" {
+  description = "db_name"
+  type        = string
+}
+variable "db_username" {
+  description = "db_user"
+  type        = string
+}
+
 variable "db_password" {
   description = "db_password"
   type        = string
-  sensitive =  true
+  sensitive   = true
 }
 
 variable "db_endpoint" {
   description = "db_endpoint"
   type        = string
+  sensitive   = true
 }
 
+
+# acm
 variable "acm_arn" {
   description = "acm_arn"
+  type        = string
+}
+
+variable "hosted_zone_arn" {
+  description = "hosted zone arn"
   type        = string
 }

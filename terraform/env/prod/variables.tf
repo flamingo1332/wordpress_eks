@@ -29,6 +29,12 @@ variable "domain_name" {
   type        = string
 }
 
+variable "slack_url" {
+  description = "slack_url for notification(eks monitoring)"
+  type        = string
+}
+
+
 # --------------------------------------------------------
 # vpc
 # --------------------------------------------------------
@@ -109,6 +115,10 @@ variable "eks_cluster_capacity_type" {
   type        = string
 }
 
+
+variable "secrets_manager_name" {
+  type = string
+}
 
 
 # --------------------------------------------------------

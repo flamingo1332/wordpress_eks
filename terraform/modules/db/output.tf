@@ -1,3 +1,4 @@
+
 output "db_endpoint" {
   description = "db_endpoint"
   value       = module.db.db_instance_endpoint

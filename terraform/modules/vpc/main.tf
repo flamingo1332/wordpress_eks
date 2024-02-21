@@ -33,6 +33,7 @@ module "vpc" {
 
 
   tags = {
-    Project = "${var.project_name}_${var.env}"
+    Project     = var.project_name
+    Environment = var.env
   }
 }
