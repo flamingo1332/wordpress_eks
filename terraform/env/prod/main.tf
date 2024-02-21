@@ -124,8 +124,9 @@ module "db" {
   env          = var.env
 
   vpc_security_group_id = module.vpc.vpc_security_group_id
-  subnet_ids            = module.vpc.db_subnet_ids
-
+  db_subnet_ids            = module.vpc.db_subnet_ids
+  db_subnet_group_name     = module.vpc.db_subnet_group_name
+  
   engine            = var.db_engine
   engine_version    = var.db_engine_version
   instance_class    = var.db_instance_class

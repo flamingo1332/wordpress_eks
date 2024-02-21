@@ -15,11 +15,14 @@ variable "vpc_security_group_id" {
   type        = string
 }
 
-variable "subnet_ids" {
+variable "db_subnet_ids" {
   description = "subnet_ids"
   type        = list(string)
 }
-
+variable "db_subnet_group_name" {
+  description = "database_subnet_group_name"
+  type        = string
+}
 
 variable "engine" {
   description = "rds engine"

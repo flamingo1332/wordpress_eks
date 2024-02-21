@@ -1,11 +1,12 @@
-# RDS free tier instance for wordpress DB
+# RDS for wordpress DB
 module "db" {
   source     = "terraform-aws-modules/rds/aws"
   version    = "~> 6.0"
   identifier = "wordpress-db-instance"
 
   vpc_security_group_ids = [var.vpc_security_group_id]
-  subnet_ids             = var.subnet_ids
+  db_subnet_group_name   = var.db_subnet_group_name
+  subnet_ids             = var.db_subnet_ids
 
   engine            = var.engine
   engine_version    = var.engine_version

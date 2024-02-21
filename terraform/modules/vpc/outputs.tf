@@ -23,3 +23,8 @@ output "db_subnet_ids" {
   description = "db_subnet_ids"
   value       = module.vpc.database_subnets
 }
+
+output "db_subnet_group_name" {
+  description = "database_subnet_group_name"
+  value       = module.vpc.database_subnet_group_name
+}
