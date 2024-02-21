@@ -12,7 +12,7 @@ variable "project_name" {
 
 variable "vpc_security_group_id" {
   description = "vpc_security_group_id"
-  type        = list(string)
+  type        = string
 }
 
 variable "subnet_ids" {

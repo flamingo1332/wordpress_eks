@@ -4,7 +4,7 @@ module "db" {
   version    = "~> 6.0"
   identifier = "wordpress-db-instance"
 
-  vpc_security_group_ids = var.vpc_security_group_id
+  vpc_security_group_ids = [var.vpc_security_group_id]
   subnet_ids             = var.subnet_ids
 
   engine            = var.engine

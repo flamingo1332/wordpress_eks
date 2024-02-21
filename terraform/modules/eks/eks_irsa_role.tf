@@ -101,19 +101,18 @@ module "irsa_role" {
 resource "aws_iam_policy" "avp_policy" {
   name        = "avp-Policy"
   description = "Policy for argocd vault plugin"
-  policy      = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": "secretsmanager:GetSecretValue",
-            "Resource": [${aws_secretsmanager_secret.eks_secrets.arn}]
-        }
+  policy      = jsonencode({
+    Version   = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "secretsmanager:GetSecretValue"
+        Resource = [aws_secretsmanager_secret.eks_secrets.arn]
+      },
     ]
+  })
 }
-EOF
-}
+
 
 # prometheus irsa role(for storing monitoring data on s3)
 # module "prometheus_irsa_role" {
