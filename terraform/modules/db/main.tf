@@ -17,6 +17,8 @@ module "db" {
   password = random_password.db_password.result
   port     = "3306"
 
+  # t2.micro does not support encryption at rest
+  storage_encrypted = false
 
 
   maintenance_window = "Mon:00:00-Mon:03:00"
