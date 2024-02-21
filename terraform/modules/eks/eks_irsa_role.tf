@@ -10,7 +10,9 @@ module "cluster_autoscaler_irsa_role" {
 
   role_name                        = "cluster-autoscaler"
   attach_cluster_autoscaler_policy = true
-  cluster_autoscaler_cluster_ids   = [module.eks.cluster_id]
+
+  # https://github.com/terraform-aws-modules/terraform-aws-iam/issues/368
+  cluster_autoscaler_cluster_ids   = [module.eks.cluster_name]
 
   oidc_providers = {
     ex = {
