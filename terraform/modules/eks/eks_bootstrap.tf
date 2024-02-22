@@ -97,11 +97,9 @@ resource "helm_release" "argocd" {
 
       serviceAccount:
         automountServiceAccountToken: true
+        annotations:
+          eks.amazonaws.com/role-arn: ${module.irsa_role.iam_role_arn}
       
-      repoServer:
-        serviceAccount:
-          annotations:
-            eks.amazonaws.com/role-arn: ${module.irsa_role.iam_role_arn}
     EOT
   ]
 }

@@ -9,8 +9,7 @@ resource "aws_secretsmanager_secret" "eks_secrets" {
   }
 }
 
-
-resource "aws_secretsmanager_secret_version" "example" {
+resource "aws_secretsmanager_secret_version" "eks_secrets" {
   secret_id = aws_secretsmanager_secret.eks_secrets.id
   secret_string = jsonencode({
     aws_region  = var.aws_region,
@@ -36,6 +35,7 @@ resource "aws_secretsmanager_secret_version" "example" {
   })
 
 }
+
 
 resource "random_password" "wordpress_user_password" {
   length  = 12

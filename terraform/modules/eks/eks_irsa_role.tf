@@ -81,7 +81,7 @@ module "irsa_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name              = "argocd-vault-plugin"
-  allow_self_assume_role = true
+  allow_self_assume_role = false
 
   oidc_providers = {
     ex = {
@@ -113,6 +113,11 @@ resource "aws_iam_policy" "avp_policy" {
       },
     ]
   })
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.env
+  }
 }
 
 
