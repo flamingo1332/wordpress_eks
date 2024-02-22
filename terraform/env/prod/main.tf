@@ -82,8 +82,7 @@ module "route53" {
   domain_name  = var.domain_name
 }
 
-
-# db & secrets manager
+# rds for wordpress
 module "db" {
   source       = "../../modules/db"
   project_name = var.project_name
