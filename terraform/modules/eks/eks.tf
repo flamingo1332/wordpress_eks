@@ -1,3 +1,43 @@
+terraform {
+  required_providers {
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = ">= 1.7.0"
+    }
+  }
+}
+
+data "aws_eks_cluster" "cluster" { name = module.eks.cluster_name }
+data "aws_eks_cluster_auth" "cluster" { name = module.eks.cluster_name }
+
+provider "helm" {
+  kubernetes {
+    host                   = data.aws_eks_cluster.cluster.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
+    token = data.aws_eks_cluster_auth.cluster.token
+  }
+}
+
+provider "kubectl" {
+  host                   = data.aws_eks_cluster.cluster.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
+  token = data.aws_eks_cluster_auth.cluster.token
+  load_config_file = false
+  # exec {
+  #   api_version = "client.authentication.k8s.io/v1beta1"
+  #   args        = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.cluster.id]
+  #   command     = "aws"
+  # }
+}
+
+provider "kubernetes" {
+  host                   = module.eks.cluster_endpoint
+  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+  token                  = data.aws_eks_cluster_auth.cluster.token
+}
+
+
+
 # eks cluster
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
@@ -67,6 +107,8 @@ module "eks" {
   ]
 
   # aws lb controller 호환
+  # duplicate error
+
   # node_security_group_additional_rules = {
   #   ingress_allow_access_from_control_plane = {
   #     type                          = "ingress"
@@ -77,8 +119,6 @@ module "eks" {
   #     description                   = "Allow access from control plane to webhook port of AWS load balancer controller"
   #   }
   # }
-
-
 
   tags = {
     Project     = var.project_name
