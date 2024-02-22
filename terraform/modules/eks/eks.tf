@@ -56,7 +56,7 @@ module "eks" {
 
   # configmap for eks user access
   # configure iam role with configmap and assume that role with iam user
-  create_aws_auth_configmap = true
+  # create_aws_auth_configmap = true <- this is only intended for scenarios where the configmap does not exist (i.e. - when using only self-managed node groups)
   manage_aws_auth_configmap = true
   aws_auth_roles = [
     {
