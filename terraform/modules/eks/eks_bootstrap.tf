@@ -113,7 +113,7 @@ resource "helm_release" "argocd" {
         
         # https://argocd-vault-plugin.readthedocs.io/en/stable/usage/#caveats - need to be increased if lots of placeholders have to be processed for a given Application
         - name: ARGOCD_EXEC_TIMEOUT
-          value: 180
+          value: "180"
         securityContext:
           runAsNonRoot: true
           runAsUser: 999
