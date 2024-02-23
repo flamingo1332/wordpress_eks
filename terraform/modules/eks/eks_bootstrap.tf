@@ -7,6 +7,7 @@ locals {
 }
 
 
+# Sidecar containers in Kubernetes 1.29 aren't supported with IAM roles for service accounts in the same Pod.
 resource "helm_release" "argocd" {
   name       = "argocd"
   repository = "https://argoproj.github.io/argo-helm"
@@ -98,13 +99,15 @@ resource "helm_release" "argocd" {
       serviceAccount:
         automountServiceAccountToken: true
         annotations:
-          eks.amazonaws.com/role-arn: ${module.irsa_role.iam_role_arn}
+          eks.amazonaws.com/role-arn: ${module.argocd_vault_plugin_irsa_role.iam_role_arn}
       
     EOT
   ]
 }
 
 
+
+# argocd application manifest
 # resource "kubectl_manifest" "argo_application" {
 #   depends_on = [helm_release.argocd]
 #   yaml_body  = <<YAML

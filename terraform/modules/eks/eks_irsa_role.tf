@@ -15,7 +15,7 @@ module "cluster_autoscaler_irsa_role" {
   cluster_autoscaler_cluster_ids   = [module.eks.cluster_name]
 
   oidc_providers = {
-    ex = {
+    one = {
       provider_arn               = module.eks.oidc_provider_arn
       namespace_service_accounts = ["kube-system:cluster-autoscaler"]
     }
@@ -39,7 +39,7 @@ module "external_dns_irsa_role" {
   external_dns_hosted_zone_arns = [var.hosted_zone_arn]
 
   oidc_providers = {
-    ex = {
+    one = {
       provider_arn               = module.eks.oidc_provider_arn
       namespace_service_accounts = ["kube-system:external-dns"]
     }
@@ -63,7 +63,7 @@ module "aws_load_balancer_controller_irsa_role" {
   attach_load_balancer_controller_policy = true
 
   oidc_providers = {
-    ex = {
+    one = {
       provider_arn               = module.eks.oidc_provider_arn
       namespace_service_accounts = ["kube-system:aws-load-balancer-controller"]
     }
@@ -77,14 +77,14 @@ module "aws_load_balancer_controller_irsa_role" {
 
 
 # argocd vault plugin role (for aws secrets manager access)
-module "irsa_role" {
+module "argocd_vault_plugin_irsa_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name              = "argocd-vault-plugin"
-  allow_self_assume_role = true
+  allow_self_assume_role = false
 
   oidc_providers = {
-    ex = {
+    one = {
       provider_arn               = module.eks.oidc_provider_arn
       namespace_service_accounts = ["argocd:argocd-repo-server"]
     }

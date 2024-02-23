@@ -3,6 +3,7 @@
 resource "aws_secretsmanager_secret" "eks_secrets" {
   name        = var.secrets_manager_name
   description = "Secrets required for eks bootstrap"
+  recovery_window_in_days = 0
   tags = {
     Project     = var.project_name
     Environment = var.env
