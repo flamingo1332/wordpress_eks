@@ -71,7 +71,7 @@ resource "random_password" "db_password" {
 
 
 # create a db user for aws iam authentication
-resource "null_resource" "db_iam_user" {
+resource "null_resource" "db_user" {
   depends_on = [module.db]
 
   provisioner "local-exec" {
