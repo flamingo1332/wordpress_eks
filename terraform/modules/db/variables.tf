@@ -49,7 +49,11 @@ variable "db_name" {
   type        = string
 }
 
-variable "username" {
+variable "db_master_username" {
+  description = "db_master_username"
+  type        = string
+}
+variable "db_username" {
   description = "db_username"
   type        = string
 }

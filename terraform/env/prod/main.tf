@@ -52,8 +52,6 @@ module "eks" {
   private_subnets = module.vpc.private_subnets
   vpc_owner_id    = module.vpc.vpc_owner_id
 
-  hosted_zone_arn = module.route53.hosted_zone_arn
-
   # managed node group config
   desired_size   = var.eks_cluster_desired_size
   min_size       = var.eks_cluster_min_size
@@ -72,7 +70,13 @@ module "eks" {
   acm_arn              = module.route53.acm_arn
   slack_url            = var.slack_url
   secrets_manager_name = var.secrets_manager_name
+
+  #  irsa role
+  hosted_zone_arn         = module.route53.hosted_zone_arn
+  db_instance_resource_id = module.db.db_instance_resource_id
+  db_instance_username    = module.db.db_instance_username
 }
+
 
 # route53 & acm
 module "route53" {
@@ -82,6 +86,7 @@ module "route53" {
   domain_name  = var.domain_name
 }
 
+
 # rds for wordpress
 module "db" {
   source       = "../../modules/db"
@@ -89,14 +94,15 @@ module "db" {
   env          = var.env
 
   vpc_security_group_id = module.vpc.vpc_security_group_id
-  db_subnet_ids            = module.vpc.db_subnet_ids
-  db_subnet_group_name     = module.vpc.db_subnet_group_name
-  
+  db_subnet_ids         = module.vpc.db_subnet_ids
+  db_subnet_group_name  = module.vpc.db_subnet_group_name
+
   engine            = var.db_engine
   engine_version    = var.db_engine_version
   instance_class    = var.db_instance_class
   allocated_storage = var.db_allocated_storage
   db_name           = var.db_name
-  username          = var.db_username
+  db_username       = var.db_username
+  db_master_username= var.db_master_username
 }
 

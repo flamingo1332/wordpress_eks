@@ -6,9 +6,6 @@ on:
       - main 
 
 
-# env:
-  # DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
-
 jobs:
   terraform:
     name: terraform plan apply

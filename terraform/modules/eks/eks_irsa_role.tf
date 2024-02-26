@@ -12,7 +12,7 @@ module "cluster_autoscaler_irsa_role" {
   attach_cluster_autoscaler_policy = true
 
   # https://github.com/terraform-aws-modules/terraform-aws-iam/issues/368
-  cluster_autoscaler_cluster_ids   = [module.eks.cluster_name]
+  cluster_autoscaler_cluster_ids = [module.eks.cluster_name]
 
   oidc_providers = {
     one = {
@@ -50,9 +50,6 @@ module "external_dns_irsa_role" {
   }
 }
 
-
-
-
 # aws lb controller
 module "aws_load_balancer_controller_irsa_role" {
   create_role = true
@@ -74,7 +71,6 @@ module "aws_load_balancer_controller_irsa_role" {
     Environment = var.env
   }
 }
-
 
 # argocd vault plugin role (for aws secrets manager access)
 module "argocd_vault_plugin_irsa_role" {
@@ -103,8 +99,8 @@ module "argocd_vault_plugin_irsa_role" {
 resource "aws_iam_policy" "avp_policy" {
   name        = "avp-Policy"
   description = "Policy for argocd vault plugin"
-  policy      = jsonencode({
-    Version   = "2012-10-17"
+  policy = jsonencode({
+    Version = "2012-10-17"
     Statement = [
       {
         Effect   = "Allow"
@@ -119,6 +115,55 @@ resource "aws_iam_policy" "avp_policy" {
     Environment = var.env
   }
 }
+
+
+# wordpress role for db authentication
+# https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html
+module "wordpress_irsa_role" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+  role_name              = "wordpress_database_authentication"
+  allow_self_assume_role = false
+
+  oidc_providers = {
+    one = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["wordpress:wordpress"]
+    }
+  }
+
+  role_policy_arns = {
+    policy = aws_iam_policy.wordpress_policy.arn
+  }
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.env
+  }
+}
+
+resource "aws_iam_policy" "wordpress_policy" {
+  name        = "wordpress-Policy"
+  description = "Policy for wordpress db authentication"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "rds-db:connect"
+        Resource = "arn:aws:rds-db:${var.aws_region}:${data.aws_caller_identity.current.account_id}:dbuser:${var.db_instance_resource_id}/${var.db_instance_username}"
+      },
+    ]
+  })
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.env
+  }
+}
+
+data "aws_caller_identity" "current" {}
+
 
 
 # prometheus irsa role(for storing monitoring data on s3)

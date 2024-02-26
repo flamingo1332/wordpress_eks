@@ -113,6 +113,16 @@ variable "db_endpoint" {
   sensitive   = true
 }
 
+variable "db_instance_resource_id" {
+  description = "db_instance_resource_id"
+  type        = string
+}
+
+variable "db_instance_username" {
+  description = "db_instance_username"
+  type        = string
+}
+
 
 # acm
 variable "acm_arn" {

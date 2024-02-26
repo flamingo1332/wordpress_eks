@@ -1,8 +1,8 @@
 # store secret in secrets_manager
 # and argocd external secrets operator(or vault plugin) will pick it up
 resource "aws_secretsmanager_secret" "eks_secrets" {
-  name        = var.secrets_manager_name
-  description = "Secrets required for eks bootstrap"
+  name                    = var.secrets_manager_name
+  description             = "Secrets required for eks bootstrap"
   recovery_window_in_days = 0
   tags = {
     Project     = var.project_name
@@ -29,12 +29,11 @@ resource "aws_secretsmanager_secret_version" "eks_secrets" {
 
     vpc_id = var.vpc_id,
 
-    aws_load_balancer_controller_irsa_role_arn = module.aws_load_balancer_controller_irsa_role.iam_role_arn,
+    arn_aws_load_balancer_controller_irsa_role = module.aws_load_balancer_controller_irsa_role.iam_role_arn,
     arn_external_dns_irsa_role                 = module.external_dns_irsa_role.iam_role_arn,
     arn_cluster_autoscaler_irsa_role           = module.cluster_autoscaler_irsa_role.iam_role_arn,
-
+    arn_wordpress_irsa_role                    = module.wordpress_irsa_role.iam_role_arn,
   })
-
 }
 
 
@@ -43,24 +42,4 @@ resource "random_password" "wordpress_user_password" {
   special = false
   # override_special = "!#$%&*()-_=+[]{}<>:?"
 }
-
-
-# -----wordpress
-# db password
-# db endpoint
-# acm arn
-
-# ----------aws-lb-controller
-# vpc id 
-# aws controller irsa role arn 
-
-
-# ----------cluster autoscaler
-# cluster name
-# aws region
-# autoscaler irsa role arn
-
-# -------------externalDNS
-# role arn
-# domain name
 

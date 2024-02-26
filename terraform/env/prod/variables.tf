@@ -155,3 +155,8 @@ variable "db_username" {
   description = "db_username"
   type        = string
 }
+
+variable "db_master_username" {
+  description = "db_master_username"
+  type        = string
+}
