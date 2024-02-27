@@ -15,7 +15,7 @@ module "db" {
 
 
   db_name  = var.db_name
-  username = var.db_master_username
+  username = var.db_username
   password = random_password.db_password.result
   port     = "3306"
 

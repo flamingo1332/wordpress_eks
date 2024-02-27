@@ -63,13 +63,16 @@ module "eks" {
   # addon (kube-proxy, vpc-cni, coredns)
   cluster_addons = {
     vpc-cni = {
-      resolve_conflicts = "OVERWRITE"
+      resolve_conflicts_on_create = try(each.value.resolve_conflicts_on_create, "OVERWRITE")
+  
     }
     coredns = {
-      resolve_conflicts = "OVERWRITE"
+      resolve_conflicts_on_create = try(each.value.resolve_conflicts_on_create, "OVERWRITE")
+  
     }
     kube-proxy = {
-      resolve_conflicts = "OVERWRITE"
+      resolve_conflicts_on_create = try(each.value.resolve_conflicts_on_create, "OVERWRITE")
+  
     }
   }
 
