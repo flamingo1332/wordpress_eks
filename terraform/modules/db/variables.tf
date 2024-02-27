@@ -10,7 +10,7 @@ variable "project_name" {
 
 
 
-variable "vpc_security_group_id" {
+variable "db_security_group_id" {
   description = "vpc_security_group_id"
   type        = string
 }
@@ -57,3 +57,4 @@ variable "db_username" {
   description = "db_username"
   type        = string
 }
+

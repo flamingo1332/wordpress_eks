@@ -93,7 +93,7 @@ module "db" {
   project_name = var.project_name
   env          = var.env
 
-  vpc_security_group_id = module.vpc.vpc_security_group_id
+  db_security_group_id = module.vpc.db_security_group_id
   db_subnet_ids         = module.vpc.db_subnet_ids
   db_subnet_group_name  = module.vpc.db_subnet_group_name
 

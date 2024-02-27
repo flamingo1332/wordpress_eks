@@ -4,7 +4,7 @@ module "db" {
   version    = "~> 6.0"
   identifier = "wordpress-db-instance"
 
-  vpc_security_group_ids = [var.vpc_security_group_id]
+  vpc_security_group_ids = [var.db_security_group_id]
   db_subnet_group_name   = var.db_subnet_group_name
   subnet_ids             = var.db_subnet_ids
 
@@ -69,6 +69,11 @@ resource "random_password" "db_password" {
 }
 
 
+
+
+
+
+
 # create a db user for aws iam authentication
 # resource "null_resource" "db_user" {
 #   depends_on = [module.db]
@@ -79,3 +84,5 @@ resource "random_password" "db_password" {
 #     EOF
 #   }
 # }
+
+

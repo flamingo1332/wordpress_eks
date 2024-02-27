@@ -28,3 +28,8 @@ output "db_subnet_group_name" {
   description = "database_subnet_group_name"
   value       = module.vpc.database_subnet_group_name
 }
+
+output "db_security_group_id" {
+  description = "db_security_group_id"
+  value       = aws_security_group.db.id
+}

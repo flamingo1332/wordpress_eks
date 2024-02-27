@@ -37,3 +37,29 @@ module "vpc" {
     Environment = var.env
   }
 }
+
+
+
+
+resource "aws_security_group" "db" {
+  name        = "db"
+  description = "allow connection to db from eks wordpress pod"
+  vpc_id      = module.vpc.vpc_id
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.env
+  }
+}
+
+resource "aws_vpc_security_group_ingress_rule" "db" {
+  security_group_id = aws_security_group.db.id
+  cidr_ipv4         = module.vpc.vpc_cidr_block
+  from_port         = 3306
+  to_port           = 3306
+  ip_protocol       = "tcp"
+  tags = {
+    Project     = var.project_name
+    Environment = var.env
+  }
+}
