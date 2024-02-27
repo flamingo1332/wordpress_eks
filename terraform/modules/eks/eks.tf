@@ -63,13 +63,16 @@ module "eks" {
   # addon (kube-proxy, vpc-cni, coredns)
   cluster_addons = {
     vpc-cni = {
-      resolve_conflicts_on_create = "OVERWRITE"  
+      most_recent = true
     }
     coredns = {
-      resolve_conflicts_on_create = "OVERWRITE"
+      most_recent = true
     }
     kube-proxy = {
-      resolve_conflicts_on_create = "OVERWRITE"  
+      most_recent = true
+    }
+    aws-ebs-csi-driver = {
+      most_recent = true
     }
   }
 
