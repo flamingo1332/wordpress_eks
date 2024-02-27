@@ -22,12 +22,12 @@
 
 data "aws_eks_cluster" "eks" {
   depends_on = [module.eks]
-  name = module.eks.cluster_name
+  name       = module.eks.cluster_name
 }
 
 data "aws_eks_cluster_auth" "eks" {
   depends_on = [module.eks]
-  name = module.eks.cluster_name
+  name       = module.eks.cluster_name
 }
 
 # provider "kubernetes" {
@@ -58,7 +58,7 @@ module "eks" {
   enable_irsa = true
 
   vpc_id     = var.vpc_id
-  subnet_ids = var.private_subnets
+  subnet_ids = var.vpc_private_subnets
 
   # addon (kube-proxy, vpc-cni, coredns)
   cluster_addons = {
@@ -76,17 +76,17 @@ module "eks" {
   # nodes
   eks_managed_node_groups = {
     one = {
-      desired_size = var.desired_size
-      min_size     = var.min_size
-      max_size     = var.max_size
-      disk_size    = var.disk_size
+      desired_size = var.eks_cluster_desired_size
+      min_size     = var.eks_cluster_min_size
+      max_size     = var.eks_cluster_max_size
+      disk_size    = var.eks_cluster_disk_size
 
       labels = {
-        role = var.label_role
+        role = var.eks_cluster_label_role
       }
 
-      instance_types = var.instance_types
-      capacity_type  = var.capacity_type
+      instance_types = var.eks_cluster_instance_types
+      capacity_type  = var.eks_cluster_capacity_type
 
       # Add the required tags for Cluster Autoscaler
       tags = {

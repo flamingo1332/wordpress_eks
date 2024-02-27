@@ -29,12 +29,12 @@ module "vpc" {
   project_name = var.project_name
   env          = var.env
 
-  cidr               = var.vpc_cidr
-  azs                = var.vpc_azs
-  public_subnets     = var.vpc_public_subnets
-  private_subnets    = var.vpc_private_subnets
-  database_subnets   = var.vpc_database_subnets
-  single_nat_gateway = var.vpc_single_nat_gateway
+  vpc_cidr               = var.vpc_cidr
+  vpc_azs                = var.vpc_azs
+  vpc_public_subnets     = var.vpc_public_subnets
+  vpc_private_subnets    = var.vpc_private_subnets
+  vpc_database_subnets   = var.vpc_database_subnets
+  vpc_single_nat_gateway = var.vpc_single_nat_gateway
 }
 
 module "eks" {
@@ -48,18 +48,18 @@ module "eks" {
   eks_cluster_version            = var.eks_cluster_version
   cluster_endpoint_public_access = var.eks_cluster_endpoint_public_access
 
-  vpc_id          = module.vpc.vpc_id
-  private_subnets = module.vpc.private_subnets
-  vpc_owner_id    = module.vpc.vpc_owner_id
+  vpc_id              = module.vpc.vpc_id
+  vpc_private_subnets = module.vpc.vpc_private_subnets
+  vpc_owner_id        = module.vpc.vpc_owner_id
 
   # managed node group config
-  desired_size   = var.eks_cluster_desired_size
-  min_size       = var.eks_cluster_min_size
-  max_size       = var.eks_cluster_max_size
-  disk_size      = var.eks_cluster_disk_size
-  label_role     = var.eks_cluster_label_role
-  instance_types = var.eks_cluster_instance_types
-  capacity_type  = var.eks_cluster_capacity_type
+  eks_cluster_desired_size   = var.eks_cluster_desired_size
+  eks_cluster_min_size       = var.eks_cluster_min_size
+  eks_cluster_max_size       = var.eks_cluster_max_size
+  eks_cluster_disk_size      = var.eks_cluster_disk_size
+  eks_cluster_label_role     = var.eks_cluster_label_role
+  eks_cluster_instance_types = var.eks_cluster_instance_types
+  eks_cluster_capacity_type  = var.eks_cluster_capacity_type
 
 
   # aws secrets manager
@@ -97,12 +97,12 @@ module "db" {
   db_subnet_ids         = module.vpc.db_subnet_ids
   db_subnet_group_name  = module.vpc.db_subnet_group_name
 
-  engine            = var.db_engine
-  engine_version    = var.db_engine_version
-  instance_class    = var.db_instance_class
-  allocated_storage = var.db_allocated_storage
-  db_name           = var.db_name
-  db_username       = var.db_username
-  db_master_username= var.db_master_username
+  db_engine            = var.db_engine
+  db_engine_version    = var.db_engine_version
+  db_instance_class    = var.db_instance_class
+  db_allocated_storage = var.db_allocated_storage
+  db_name              = var.db_name
+  db_username          = var.db_username
+  db_master_username   = var.db_master_username
 }
 

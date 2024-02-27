@@ -24,22 +24,22 @@ variable "db_subnet_group_name" {
   type        = string
 }
 
-variable "engine" {
+variable "db_engine" {
   description = "rds engine"
   type        = string
 }
 
-variable "engine_version" {
+variable "db_engine_version" {
   description = "rds engine version"
   type        = string
 }
 
-variable "instance_class" {
+variable "db_instance_class" {
   description = "instance class"
   type        = string
 }
 
-variable "allocated_storage" {
+variable "db_allocated_storage" {
   description = "allocated storage"
   type        = number
 }

@@ -45,7 +45,7 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "private_subnets" {
+variable "vpc_private_subnets" {
   description = "vpc private subnets"
   type        = list(string)
 }
@@ -58,34 +58,34 @@ variable "vpc_owner_id" {
 
 # eks managed node
 
-variable "desired_size" {
+variable "eks_cluster_desired_size" {
   description = "desired cluster size"
   type        = number
 }
-variable "min_size" {
+variable "eks_cluster_min_size" {
   description = "cluster min size"
   type        = number
 }
-variable "max_size" {
+variable "eks_cluster_max_size" {
   description = "cluster max size"
   type        = number
 }
-variable "disk_size" {
+variable "eks_cluster_disk_size" {
   description = "cluster disk size"
   type        = number
 }
 
-variable "label_role" {
+variable "eks_cluster_label_role" {
   description = "label role"
   type        = string
 }
 
-variable "instance_types" {
+variable "eks_cluster_instance_types" {
   description = "instance_types"
   type        = list(string)
 }
 
-variable "capacity_type" {
+variable "eks_cluster_capacity_type" {
   description = "instance capacity type"
   type        = string
 }

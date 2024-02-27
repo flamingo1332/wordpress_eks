@@ -5,16 +5,16 @@ module "vpc" {
   version = "~> 5.0"
 
   name = "${var.project_name}_vpc"
-  cidr = var.cidr
+  cidr = var.vpc_cidr
 
-  azs              = var.azs
-  public_subnets   = var.public_subnets
-  private_subnets  = var.private_subnets
-  database_subnets = var.database_subnets
+  azs              = var.vpc_azs
+  public_subnets   = var.vpc_public_subnets
+  private_subnets  = var.vpc_private_subnets
+  database_subnets = var.vpc_database_subnets
 
   create_igw         = true
   enable_nat_gateway = true
-  single_nat_gateway = var.single_nat_gateway
+  single_nat_gateway = var.vpc_single_nat_gateway
 
   create_database_subnet_group = true
 

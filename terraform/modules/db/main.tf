@@ -8,12 +8,11 @@ module "db" {
   db_subnet_group_name   = var.db_subnet_group_name
   subnet_ids             = var.db_subnet_ids
 
-  engine         = var.engine
-  engine_version = var.engine_version
-  instance_class = var.instance_class
+  engine            = var.db_engine
+  engine_version    = var.db_engine_version
+  instance_class    = var.db_instance_class
+  allocated_storage = var.db_allocated_storage
 
-  # minimum value for cost
-  allocated_storage = 20
 
   db_name  = var.db_name
   username = var.db_master_username

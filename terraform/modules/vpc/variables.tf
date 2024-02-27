@@ -7,33 +7,33 @@ variable "project_name" {
   type        = string
 }
 
-variable "cidr" {
+variable "vpc_cidr" {
   description = "The CIDR block for the VPC. Default value is a valid CIDR, but not acceptable by AWS and should be overriden"
   type        = string
 }
 
-variable "azs" {
+variable "vpc_azs" {
   description = "A list of availability zones in the region"
   type        = list(string)
 }
 
 
-variable "public_subnets" {
+variable "vpc_public_subnets" {
   description = "A list of public subnets inside the VPC"
   type        = list(string)
 }
 
-variable "private_subnets" {
+variable "vpc_private_subnets" {
   description = "A list of private subnets inside the VPC"
   type        = list(string)
 }
-variable "database_subnets" {
+variable "vpc_database_subnets" {
   description = "A list of private subnets inside the VPC"
   type        = list(string)
 }
 
 
-variable "single_nat_gateway" {
+variable "vpc_single_nat_gateway" {
   description = "single nat gateway in vpc"
   type        = bool
 }
