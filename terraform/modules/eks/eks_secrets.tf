@@ -32,7 +32,7 @@ resource "aws_secretsmanager_secret_version" "eks_secrets" {
     arn_aws_load_balancer_controller_irsa_role = module.aws_load_balancer_controller_irsa_role.iam_role_arn,
     arn_external_dns_irsa_role                 = module.external_dns_irsa_role.iam_role_arn,
     arn_cluster_autoscaler_irsa_role           = module.cluster_autoscaler_irsa_role.iam_role_arn,
-    arn_wordpress_irsa_role                    = module.wordpress_irsa_role.iam_role_arn,
+    # arn_wordpress_irsa_role                    = module.wordpress_irsa_role.iam_role_arn,
   })
 }
 

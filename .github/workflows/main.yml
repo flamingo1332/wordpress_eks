@@ -15,15 +15,6 @@ jobs:
     - name: Checkout 
       uses: actions/checkout@v4
 
-    - name: Start Mysql client 
-      run: |
-        sudo systemctl start mysql.service
-    
-    - name: Check MySQL Client
-      run: |
-        which mysql
-        mysql --version
-
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v3
       with:
