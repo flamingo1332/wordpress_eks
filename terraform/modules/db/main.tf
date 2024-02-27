@@ -70,12 +70,12 @@ resource "random_password" "db_password" {
 
 
 # create a db user for aws iam authentication
-resource "null_resource" "db_user" {
-  depends_on = [module.db]
+# resource "null_resource" "db_user" {
+#   depends_on = [module.db]
 
-  provisioner "local-exec" {
-    command = <<EOF
-    mysql -h ${module.db.db_instance_address} -u ${var.db_master_username} -p'${random_password.db_password.result}' -D ${var.db_name} -e "CREATE USER '${var.db_username}' IDENTIFIED WITH AWSAuthenticationPlugin as 'RDS'; GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER, INDEX, LOCK TABLES ON ${var.db_name}.* TO '${var.db_username}'; FLUSH PRIVILEGES;"
-    EOF
-  }
-}
+#   provisioner "local-exec" {
+#     command = <<EOF
+#     /usr/bin/mysql -h ${module.db.db_instance_address} -u ${var.db_master_username} -p'${random_password.db_password.result}' -D ${var.db_name} -e "CREATE USER '${var.db_username}' IDENTIFIED WITH AWSAuthenticationPlugin as 'RDS'; GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER, INDEX, LOCK TABLES ON ${var.db_name}.* TO '${var.db_username}'; FLUSH PRIVILEGES;"
+#     EOF
+#   }
+# }

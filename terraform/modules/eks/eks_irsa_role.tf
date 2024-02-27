@@ -117,52 +117,52 @@ resource "aws_iam_policy" "avp_policy" {
 }
 
 
-# wordpress role for db authentication
+# wordpress role for db authentication -> need to manually create rds user
 # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html
-module "wordpress_irsa_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+# module "wordpress_irsa_role" {
+#   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
-  role_name              = "wordpress_database_authentication"
-  allow_self_assume_role = false
+#   role_name              = "wordpress_database_authentication"
+#   allow_self_assume_role = false
 
-  oidc_providers = {
-    one = {
-      provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["wordpress:wordpress"]
-    }
-  }
+#   oidc_providers = {
+#     one = {
+#       provider_arn               = module.eks.oidc_provider_arn
+#       namespace_service_accounts = ["wordpress:wordpress"]
+#     }
+#   }
 
-  role_policy_arns = {
-    policy = aws_iam_policy.wordpress_policy.arn
-  }
+#   role_policy_arns = {
+#     policy = aws_iam_policy.wordpress_policy.arn
+#   }
 
-  tags = {
-    Project     = var.project_name
-    Environment = var.env
-  }
-}
+#   tags = {
+#     Project     = var.project_name
+#     Environment = var.env
+#   }
+# }
 
-resource "aws_iam_policy" "wordpress_policy" {
-  name        = "wordpress-Policy"
-  description = "Policy for wordpress db authentication"
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect   = "Allow"
-        Action   = "rds-db:connect"
-        Resource = "arn:aws:rds-db:${var.aws_region}:${data.aws_caller_identity.current.account_id}:dbuser:${var.db_instance_resource_id}/${var.db_instance_username}"
-      },
-    ]
-  })
+# resource "aws_iam_policy" "wordpress_policy" {
+#   name        = "wordpress-Policy"
+#   description = "Policy for wordpress db authentication"
+#   policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [
+#       {
+#         Effect   = "Allow"
+#         Action   = "rds-db:connect"
+#         Resource = "arn:aws:rds-db:${var.aws_region}:${data.aws_caller_identity.current.account_id}:dbuser:${var.db_instance_resource_id}/*"
+#       },
+#     ]
+#   })
 
-  tags = {
-    Project     = var.project_name
-    Environment = var.env
-  }
-}
+#   tags = {
+#     Project     = var.project_name
+#     Environment = var.env
+#   }
+# }
 
-data "aws_caller_identity" "current" {}
+# data "aws_caller_identity" "current" {}
 
 
 

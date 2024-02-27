@@ -2,8 +2,8 @@
 # helm arcocd & external secrets operator deployment
 # ------------------------------
 locals {
-  argocd_version              = "2.10.1"
-  argocd_vault_plugin_version = "1.17.0"
+  argocd_version = "2.10.1"
+  avp_version    = "1.17.0"
 }
 
 
@@ -54,11 +54,11 @@ resource "helm_release" "argocd" {
           image: registry.access.redhat.com/ubi8
           env:
             - name: AVP_VERSION
-              value: "1.17.0"
+              value: "${locals.avp_version}"
           command: ["sh", "-c"]
           args:
             - >-
-              curl -L https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v1.17.0/argocd-vault-plugin_1.17.0_linux_amd64 -o argocd-vault-plugin &&
+              curl -L https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v${locals.avp_version}/argocd-vault-plugin_${locals.avp_version}_linux_amd64 -o argocd-vault-plugin &&
               chmod +x argocd-vault-plugin &&
               mv argocd-vault-plugin /custom-tools/
           volumeMounts:
@@ -69,7 +69,7 @@ resource "helm_release" "argocd" {
       extraContainers:
       - name: avp-helm
         command: [/var/run/argocd/argocd-cmp-server]
-        image: quay.io/argoproj/argocd:v2.10.1
+        image: quay.io/argoproj/argocd:v${locals.argocd_version}
         env:
         - name: AVP_TYPE
           value: awssecretsmanager

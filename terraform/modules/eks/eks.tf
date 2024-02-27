@@ -94,10 +94,7 @@ module "eks" {
         "k8s.io/cluster-autoscaler/${var.project_name}_cluster" = "true"
       }
     }
-
-
   }
-
 
   tags = {
     Project     = var.project_name
