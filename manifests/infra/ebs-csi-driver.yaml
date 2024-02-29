@@ -26,3 +26,14 @@ spec:
               eks.amazonaws.com/role-arn: <path:prod/wordpress_eks#arn_ebs_csi_driver_irsa_role>
           
           region: <path:prod/wordpress_eks#aws_region>
+          
+        storageClasses:
+        - name: ebs-gp2
+          annotations:
+            storageclass.kubernetes.io/is-default-class: "true"
+          parameters:
+            type: gp2
+            fsType: ext4
+          reclaimPolicy: Delete
+          volumeBindingMode: WaitForFirstConsumer
+          allowVolumeExpansion: true
