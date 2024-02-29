@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ebs-csi-driver
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "11"
+spec:
+  project: default
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    repoURL: 'https://kubernetes-sigs.github.io/aws-ebs-csi-driver/'
+    chart: aws-ebs-csi-driver
+    targetRevision: 2.28.1
+    helm:
+      values: |
+        controller:
+          serviceAccount:
+            annotations:
+              eks.amazonaws.com/role-arn: <path:prod/wordpress_eks#arn_ebs_csi_driver_irsa_role>
+          
+          region: <path:prod/wordpress_eks#aws_region>

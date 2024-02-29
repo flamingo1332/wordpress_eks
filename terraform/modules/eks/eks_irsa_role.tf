@@ -4,13 +4,13 @@
 
 #cluster_autoscaler
 module "cluster_autoscaler_irsa_role" {
-  create_role                      = true
-  source                           = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version                          = "~> 5.0"
+  create_role = true
+  source      = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version     = "~> 5.0"
   role_name                        = "cluster-autoscaler"
   attach_cluster_autoscaler_policy = true
-  cluster_autoscaler_cluster_ids   = [module.eks.cluster_name]
-
+  cluster_autoscaler_cluster_ids = [module.eks.cluster_name]
+  
   oidc_providers = {
     one = {
       provider_arn               = module.eks.oidc_provider_arn
@@ -26,11 +26,11 @@ module "cluster_autoscaler_irsa_role" {
 
 # externalDNS
 module "external_dns_irsa_role" {
-  create_role                   = true
-  source                        = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version                       = "~> 5.0"
-  role_name                     = "external-dns"
-  attach_external_dns_policy    = true
+  create_role = true
+  source      = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version     = "~> 5.0"
+  role_name                  = "external-dns"
+  attach_external_dns_policy = true
   external_dns_hosted_zone_arns = [var.hosted_zone_arn]
 
   oidc_providers = {
@@ -116,26 +116,26 @@ resource "aws_iam_policy" "avp_policy" {
 
 
 # ebs_csi_driver
-# module "ebs_csi_driver_irsa_role" {
-#   create_role = true
-#   source      = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-#   version     = "~> 5.0"
+module "ebs_csi_driver_irsa_role" {
+  create_role = true
+  source      = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version     = "~> 5.0"
 
-#   role_name             = "ebs-csi-driver"
-#   attach_ebs_csi_policy = true
+  role_name             = "ebs-csi-driver"
+  attach_ebs_csi_policy = true
 
-#   oidc_providers = {
-#     one = {
-#       provider_arn               = module.eks.oidc_provider_arn
-#       namespace_service_accounts = ["kube-system:ebs-csi-controller-sa"]
-#     }
-#   }
+  oidc_providers = {
+    one = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["kube-system:ebs-csi-controller-sa"]
+    }
+  }
 
-#   tags = {
-#     Project     = var.project_name
-#     Environment = var.env
-#   }
-# }
+  tags = {
+    Project     = var.project_name
+    Environment = var.env
+  }
+}
 
 
 
