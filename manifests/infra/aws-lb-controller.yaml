@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: aws-lb-controller
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "14"
+spec:
+  project: default      
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    repoURL: 'https://aws.github.io/eks-charts' 
+    chart: aws-load-balancer-controller
+    targetRevision: 1.7.1 
+    plugin:
+      env:
+        - name: HELM_VALUES
+          value: |
+            clusterName: <path:prod/wordpress_eks#cluster_name>
+
+            region: <path:prod/wordpress_eks#aws_region>
+
+            vpcId: <path:prod/wordpress_eks#vpc_id>
+
+            serviceAccount:
+              create: true
+              name: aws-load-balancer-controller
+              annotations:
+                eks.amazonaws.com/role-arn: <path:prod/wordpress_eks#arn_aws_load_balancer_controller_irsa_role>
+
+            replicaCount: 1
+
+            resources:
+              limits:
+                cpu: 100m
+                memory: 300Mi
+              requests:
+                cpu: 100m
+                memory: 300Mi
+
+            defaultTags:
+              Environment: <path:prod/wordpress_eks#env>
+              Project: <path:prod/wordpress_eks#project_name>

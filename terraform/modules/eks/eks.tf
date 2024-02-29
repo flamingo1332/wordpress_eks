@@ -1,25 +1,3 @@
-# terraform {
-#   required_providers {
-#     kubectl = {
-#       source  = "gavinbunney/kubectl"
-#       version = ">= 1.7.0"
-#     }
-#   }
-# }
-
-# provider "kubectl" {
-#   host                   = data.aws_eks_cluster.cluster.endpoint
-#   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
-#   token                  = data.aws_eks_cluster_auth.cluster.token
-#   load_config_file = false
-#   # exec {
-#   #   api_version = "client.authentication.k8s.io/v1beta1"
-#   #   args        = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.cluster.id]
-#   #   command     = "aws"
-#   # }
-# }
-
-
 data "aws_eks_cluster" "eks" {
   depends_on = [module.eks]
   name       = module.eks.cluster_name
@@ -29,13 +7,6 @@ data "aws_eks_cluster_auth" "eks" {
   depends_on = [module.eks]
   name       = module.eks.cluster_name
 }
-
-# provider "kubernetes" {
-#   host                   = data.aws_eks_cluster.eks.endpoint
-#   cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
-#   token                  = data.aws_eks_cluster_auth.eks.token
-# }
-
 
 provider "helm" {
   kubernetes {
@@ -53,7 +24,7 @@ module "eks" {
   cluster_version = var.eks_cluster_version
 
   cluster_endpoint_private_access = true
-  cluster_endpoint_public_access  = var.cluster_endpoint_public_access
+  cluster_endpoint_public_access  = var.eks_cluster_endpoint_public_access
 
   enable_irsa = true
 
@@ -90,6 +61,10 @@ module "eks" {
 
       instance_types = var.eks_cluster_instance_types
       capacity_type  = var.eks_cluster_capacity_type
+
+      # iam_role_additional_policies = {
+      #   AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/AmazonEBSCSIDriverPolicy"
+      # }
 
       # Add the required tags for Cluster Autoscaler
       tags = {

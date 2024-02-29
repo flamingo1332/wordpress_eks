@@ -9,12 +9,6 @@ variable "project_name" {
 
 
 
-
-variable "db_security_group_id" {
-  description = "vpc_security_group_id"
-  type        = string
-}
-
 variable "db_subnet_ids" {
   description = "subnet_ids"
   type        = list(string)
@@ -55,6 +49,17 @@ variable "db_master_username" {
 }
 variable "db_username" {
   description = "db_username"
+  type        = string
+}
+
+
+variable "vpc_id" {
+  description = "db_username"
+  type        = string
+}
+
+variable "vpc_cidr_block" {
+  description = "vpc_cidr_block"
   type        = string
 }
 

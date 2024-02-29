@@ -4,7 +4,7 @@ module "db" {
   version    = "~> 6.0"
   identifier = "wordpress-db-instance"
 
-  vpc_security_group_ids = [var.db_security_group_id]
+  vpc_security_group_ids = [aws_security_group.db.id]
   db_subnet_group_name   = var.db_subnet_group_name
   subnet_ids             = var.db_subnet_ids
 
@@ -23,7 +23,7 @@ module "db" {
   storage_encrypted = false
 
   # iam authentication
-  iam_database_authentication_enabled = true
+  iam_database_authentication_enabled = false
 
   manage_master_user_password = false
 
@@ -61,17 +61,37 @@ module "db" {
   }
 }
 
-
+# db password generation
 resource "random_password" "db_password" {
   length           = 12
   special          = true
   override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
+# db security group
+resource "aws_security_group" "db" {
+  name        = "db"
+  description = "allow connection to db from eks wordpress pod"
+  vpc_id      = var.vpc_id
 
+  ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr_block]
+  }
 
-
-
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = [var.vpc_cidr_block]
+  }
+  tags = {
+    Project     = var.project_name
+    Environment = var.env
+  }
+}
 
 
 # create a db user for aws iam authentication

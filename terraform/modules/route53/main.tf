@@ -1,5 +1,5 @@
 data "aws_route53_zone" "selected" {
-  name         = "ksw29555-cloudresume.name"
+  name         = substr(var.domain_name, 10, length(var.domain_name))
   private_zone = false
 }
 
@@ -17,34 +17,11 @@ module "acm" {
 
   wait_for_validation = true
 
+
   tags = {
     Project     = var.project_name
     Environment = var.env
   }
 }
-
-
-# 
-# let aws-lb-controller handle route53 records
-# 
-# record for subdomain wordpress.ksw29555-cloudresume.name
-# module "dns_records" {
-#   source  = "terraform-aws-modules/route53/aws//modules/records"
-#   version = "~> 2.0" # Specify the module version
-
-#   zone_id = data.aws_route53_zone.selected.zone_id # Replace with the Zone ID of ksw29555-cloudresume.name
-#   records = [
-#     {
-#       name = "wordpress.ksw29555-clourdresume.name"
-#       type = "A"
-#       alias = {
-#         name                   = module.alb.alb_dns_name
-#         zone_id                = module.alb.alb_zone_id
-#         evaluate_target_health = true
-#       }
-#     }
-#   ]
-# }
-
 
 

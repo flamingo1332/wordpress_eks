@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: aws-load-balancer-controller-crds
+  namespace: argocd  
+  annotations:
+    argocd.argoproj.io/sync-wave: "13"
+spec:
+  project: default  
+  source:
+    repoURL: 'https://github.com/aws/eks-charts.git' 
+    targetRevision: HEAD 
+    path: 'stable/aws-load-balancer-controller/crds' 
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: kube-system  
+  syncPolicy:
+    automated:  
+      prune: true  
+      selfHeal: true
+
+
+# aws-lb-controller helm chart does not have crds in them
+# need to install them separately(beforehand)

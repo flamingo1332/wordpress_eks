@@ -29,7 +29,7 @@ variable "eks_cluster_version" {
   type        = string
 }
 
-variable "cluster_endpoint_public_access" {
+variable "eks_cluster_endpoint_public_access" {
   description = "cluster_endpoint_public_access"
   type        = bool
 }

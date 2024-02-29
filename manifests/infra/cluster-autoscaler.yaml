@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cluster-autoscaler
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "12"
+spec:
+  project: default
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    repoURL: 'https://kubernetes.github.io/autoscaler'
+    chart: cluster-autoscaler
+    targetRevision: 9.35.0
+    plugin:
+      env:
+        - name: HELM_VALUES
+          value: |
+            autoDiscovery:
+              clusterName: <path:prod/wordpress_eks#cluster_name>
+
+            awsRegion: <path:prod/wordpress_eks#aws_region>
+
+            rbac:
+              create: true
+              serviceAccount:
+                create: true
+                name: cluster-autoscaler
+                annotations:
+                  eks.amazonaws.com/role-arn: <path:prod/wordpress_eks#arn_cluster_autoscaler_irsa_role>
+
+            replicaCount: 1
+
+            image:
+              tag: v1.29.0
+
+            cloudProvider: aws
+
+            resources:
+              limits:
+                cpu: 100m
+                memory: 300Mi
+              requests:
+                cpu: 100m
+                memory: 300Mi
+

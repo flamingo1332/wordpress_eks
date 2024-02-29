@@ -2,6 +2,10 @@ output "vpc_id" {
   description = "ID of the VPC"
   value       = module.vpc.vpc_id
 }
+output "vpc_cidr_block" {
+  description = "vpc_cidr_block"
+  value       = module.vpc.vpc_cidr_block
+}
 
 output "vpc_private_subnets" {
   description = "private subnets of the VPC"
@@ -27,9 +31,4 @@ output "db_subnet_ids" {
 output "db_subnet_group_name" {
   description = "database_subnet_group_name"
   value       = module.vpc.database_subnet_group_name
-}
-
-output "db_security_group_id" {
-  description = "db_security_group_id"
-  value       = aws_security_group.db.id
 }

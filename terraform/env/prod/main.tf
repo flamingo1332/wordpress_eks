@@ -45,8 +45,8 @@ module "eks" {
   aws_region   = var.aws_region
   domain_name  = var.domain_name
 
-  eks_cluster_version            = var.eks_cluster_version
-  cluster_endpoint_public_access = var.eks_cluster_endpoint_public_access
+  eks_cluster_version                = var.eks_cluster_version
+  eks_cluster_endpoint_public_access = var.eks_cluster_endpoint_public_access
 
   vpc_id              = module.vpc.vpc_id
   vpc_private_subnets = module.vpc.vpc_private_subnets
@@ -62,7 +62,7 @@ module "eks" {
   eks_cluster_capacity_type  = var.eks_cluster_capacity_type
 
 
-  # aws secrets manager
+  # aws secrets-manager secrets
   db_name              = var.db_name
   db_username          = var.db_username
   db_password          = module.db.db_password
@@ -80,7 +80,8 @@ module "eks" {
 
 # route53 & acm
 module "route53" {
-  source       = "../../modules/route53"
+  source = "../../modules/route53"
+
   project_name = var.project_name
   env          = var.env
   domain_name  = var.domain_name
@@ -89,13 +90,13 @@ module "route53" {
 
 # rds for wordpress
 module "db" {
-  source       = "../../modules/db"
+  source = "../../modules/db"
+
   project_name = var.project_name
   env          = var.env
 
-  db_security_group_id = module.vpc.db_security_group_id
-  db_subnet_ids         = module.vpc.db_subnet_ids
-  db_subnet_group_name  = module.vpc.db_subnet_group_name
+  db_subnet_ids        = module.vpc.db_subnet_ids
+  db_subnet_group_name = module.vpc.db_subnet_group_name
 
   db_engine            = var.db_engine
   db_engine_version    = var.db_engine_version
@@ -104,5 +105,8 @@ module "db" {
   db_name              = var.db_name
   db_username          = var.db_username
   db_master_username   = var.db_master_username
-}
 
+  # db security group
+  vpc_id         = module.vpc.vpc_id
+  vpc_cidr_block = module.vpc.vpc_cidr_block
+}

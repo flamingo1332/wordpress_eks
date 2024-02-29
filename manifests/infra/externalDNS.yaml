@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-dns
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "15"
+spec:
+  project: default
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    repoURL: 'https://charts.bitnami.com/bitnami'
+    chart: external-dns
+    targetRevision: 6.33.0
+    plugin:
+      env:
+        - name: HELM_VALUES
+          value: |
+            provider: aws
+            serviceAccount:
+              annotations:
+                eks.amazonaws.com/role-arn: <path:prod/wordpress_eks#arn_external_dns_irsa_role>
+                
+            zoneType: public  
+            rbac:
+              create: true
+            sources:
+              - service
+              - ingress
+            policy: upsert-only
+
+
+
+# route53 와 함께 사용해야 하기 때문에 configuration 만지는것 복잡할듯.

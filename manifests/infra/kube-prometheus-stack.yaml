@@ -1,0 +1,77 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "16"
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc  
+    namespace: monitoring  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
+    targetRevision: 55.8.1
+    chart: kube-prometheus-stack
+    helm:
+      values: |-
+        alertmanager: 
+          enabled: true
+          # config:
+          #   global:
+          #     resolve_timeout: 5m
+          #   route:
+          #     group_by: ['job']
+          #     group_wait: 30s
+          #     group_interval: 5m
+          #     repeat_interval: 12h
+          #     receiver: 'slack-notifications'
+          #     routes:
+          #       - receiver: 'slack-notifications'
+          #         match:
+          #           severity: critical
+          # alertmanagerSpec:
+          #   config:
+          #     global:
+          #     receivers:
+          #       - name: 'slack-notifications'
+          #         slack_configs:
+          #           - api_url: <path:prod/wordpress_eks#slack_url>
+          #             channel: '#project'
+          #             send_resolved: true
+          #             text: "{{ range .Alerts }}{{ .Annotations.summary }}\n{{ end }}"
+
+        grafana:
+          enabled: true
+          service:
+            type: ClusterIP
+          datasources:
+            datasources.yaml:
+              apiVersion: 1
+              datasources:
+              - name: Prometheus
+                type: prometheus
+                access: proxy
+                url: http://prometheus-operated.monitoring.svc.cluster.local:9090
+                isDefault: true
+                editable: true
+
+        prometheus:
+          enabled: true
+          prometheusSpec:
+            serviceMonitorNamespaceSelector: {}   #from all namespace
+            serviceMonitorSelector:
+              matchLabels:
+                release: prometheus
+
+
+    # argocd.argoproj.io/sync-options: Replace=true
+    # issue = https://github.com/prometheus-community/helm-charts/issues/1500
+  # workarount = manually replace sync in argo web UI

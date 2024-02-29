@@ -1,13 +1,11 @@
-# ------------------------------
-# helm arcocd & external secrets operator deployment
-# ------------------------------
+# helm arcocd & argocd vault plugin installation
 locals {
   argocd_version = "2.10.1"
   avp_version    = "1.17.0"
 }
 
-
 # Sidecar containers in Kubernetes 1.29 aren't supported with IAM roles for service accounts in the same Pod.
+# should use 1.28 for avp sidecar container to use iam authentication
 resource "helm_release" "argocd" {
   name       = "argocd"
   repository = "https://argoproj.github.io/argo-helm"
@@ -20,6 +18,8 @@ resource "helm_release" "argocd" {
   values = [
     <<-EOT
     configs:
+      params:
+        "controller.repo.server.timeout.seconds": 90
       cmp:
         create: true
         plugins:
@@ -76,7 +76,8 @@ resource "helm_release" "argocd" {
         - name: AWS_REGION
           value: ${var.aws_region}
         
-        # https://argocd-vault-plugin.readthedocs.io/en/stable/usage/#caveats - need to be increased if lots of placeholders have to be processed for a given Application
+        # need to be increased if lots of placeholders have to be processed for a given Application
+        # https://argocd-vault-plugin.readthedocs.io/en/stable/usage/#caveats 
         - name: ARGOCD_EXEC_TIMEOUT
           value: "180"
         securityContext:
@@ -101,6 +102,11 @@ resource "helm_release" "argocd" {
         annotations:
           eks.amazonaws.com/role-arn: ${module.argocd_vault_plugin_irsa_role.iam_role_arn}
       
+      # set up networkpolicy to prevent direct access to Argo CD components (Redis and the repo-server) 
+      # https://argocd-vault-plugin.readthedocs.io/en/stable/installation/#security-considerations
+      global:
+        networkPolicy:
+          create: true
     EOT
   ]
 }
