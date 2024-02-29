@@ -45,7 +45,7 @@ spec:
               database: <path:prod/wordpress_eks#db_name>
 
             persistence:
-              storageClass: gp2
+              storageClass: ebs-gp2
               accessMode: ReadWriteOnce
 
             autoscaling:

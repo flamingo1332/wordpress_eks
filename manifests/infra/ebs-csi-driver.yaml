@@ -18,25 +18,26 @@ spec:
     repoURL: 'https://kubernetes-sigs.github.io/aws-ebs-csi-driver/'
     chart: aws-ebs-csi-driver
     targetRevision: 2.28.1
-    helm:
-      values: |
-        controller:
-          serviceAccount:
-            annotations:
-              eks.amazonaws.com/role-arn: <path:prod/wordpress_eks#arn_ebs_csi_driver_irsa_role>
-          
-          region: <path:prod/wordpress_eks#aws_region>
-          
-        storageClasses:
-        - name: ebs-gp2
-          annotations:
-            storageclass.kubernetes.io/is-default-class: "true"
-          parameters:
-            type: gp2
-            fsType: ext4
-          reclaimPolicy: Delete
-          volumeBindingMode: WaitForFirstConsumer
-          allowVolumeExpansion: true
+    plugin:
+      env:
+        - name: HELM_VALUES
+          value: |
+            controller:
+              serviceAccount:
+                annotations:
+                  eks.amazonaws.com/role-arn: <path:prod/wordpress_eks#arn_ebs_csi_driver_irsa_role>
+              region: <path:prod/wordpress_eks#aws_region>
+              
+            storageClasses:
+            - name: ebs-gp2
+              annotations:
+                storageclass.kubernetes.io/is-default-class: "true"
+              parameters:
+                type: gp2
+                csi.storage.k8s.io/fstype: ext4
+              reclaimPolicy: Delete
+              volumeBindingMode: WaitForFirstConsumer
+              allowVolumeExpansion: true
 
-        image:
-          tag: v1.28.0
+            image:
+              tag: v1.28.0
