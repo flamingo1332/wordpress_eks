@@ -38,7 +38,7 @@ spec:
             replicaCount: 1
 
             image:
-              tag: v1.29.0
+              tag: v1.28.0
 
             cloudProvider: aws
 

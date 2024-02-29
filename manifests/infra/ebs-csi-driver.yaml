@@ -37,3 +37,6 @@ spec:
           reclaimPolicy: Delete
           volumeBindingMode: WaitForFirstConsumer
           allowVolumeExpansion: true
+
+        image:
+          tag: v1.28.0
