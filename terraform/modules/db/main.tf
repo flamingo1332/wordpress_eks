@@ -38,12 +38,6 @@ module "db" {
   create_db_option_group    = false
   create_db_parameter_group = false
 
-  # DB parameter group
-  family = "mysql5.7"
-  # DB option group
-  major_engine_version = "5.7"
-
-
   parameters = [
     {
       name  = "character_set_client"
