@@ -70,6 +70,7 @@ spec:
             serviceMonitorSelector:
               matchLabels:
                 release: prometheus
+                release: kube-prometheus-stack
 
 
     # argocd.argoproj.io/sync-options: Replace=true
