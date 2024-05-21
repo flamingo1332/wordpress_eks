@@ -13,7 +13,7 @@ Automated deployment of AWS resources with Terraform and github actions. Use Arg
 
 
 ### Architecture
-<diagram>
+![wordpress_eks drawio1](https://github.com/flamingo1332/wordpress_eks/assets/100294322/2ba21e63-730c-46ef-a603-a5dfccb297ca)
 
 
 1. GitHub Actions automatically provisions the EKS cluster and necessary AWS resources using Terraform.
@@ -104,3 +104,8 @@ wordpress, aws-lb-controller, cluster-autoscaler, externalDNS, kube-prometheus-s
 
 
 ## Output
+![Capture3](https://github.com/flamingo1332/wordpress_eks/assets/100294322/f2802a24-9813-482f-9530-4aee508c3d26)
+![Capture2](https://github.com/flamingo1332/wordpress_eks/assets/100294322/16f807ca-8997-418a-b9ca-56b14a61cf11)
+![Capture6](https://github.com/flamingo1332/wordpress_eks/assets/100294322/60bee4cc-12f5-4d80-afc1-b6b9fd44c9e3)
+
+
