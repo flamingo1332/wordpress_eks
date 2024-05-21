@@ -30,9 +30,9 @@ jobs:
       run: terraform plan
       working-directory: ./terraform/env/prod
 
-    - name: Terraform Apply
-      run: terraform apply -auto-approve
-      working-directory: ./terraform/env/prod
+    # - name: Terraform Apply
+    #   run: terraform apply -auto-approve
+    #   working-directory: ./terraform/env/prod
 
 
     
