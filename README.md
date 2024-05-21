@@ -105,7 +105,7 @@ wordpress, aws-lb-controller, cluster-autoscaler, externalDNS, kube-prometheus-s
 
 ## Output
 ![Capture3](https://github.com/flamingo1332/wordpress_eks/assets/100294322/f2802a24-9813-482f-9530-4aee508c3d26)
-![Capture2](https://github.com/flamingo1332/wordpress_eks/assets/100294322/16f807ca-8997-418a-b9ca-56b14a61cf11)
+![Capture2](https://github.com/flamingo1332/wordpress_eks/assets/100294322/a64fa892-6a69-417e-89ab-8c240d403e1a)
 ![Capture6](https://github.com/flamingo1332/wordpress_eks/assets/100294322/60bee4cc-12f5-4d80-afc1-b6b9fd44c9e3)
 
 
